@@ -1,0 +1,112 @@
+public static char[][] generateForest1(char[][] forestState, int numOfGenerations) {
+		//初始打印
+		System.out.println("=============");
+		System.out.println("Initial state");
+		System.out.println("-------------------");
+		for (int i = 0; i <  forestState.length; i++) {
+			for (int j = 0; j < forestState[i].length; j++) {
+				System.out.print(forestState[i][j] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println("===================");
+		System.out.println(" ");
+		//定义一些数字
+		int count = 0;
+
+		//开始循环
+		while (count < numOfGenerations) {
+			int numG = 0;
+			int numD = 0;
+			int numI = 0;
+			//先来检索有多少个I,G,D
+			for (int i = 0; i < forestState.length; i++) {
+				for (int j = 0; j < forestState[i].length; j++) {
+					if (forestState[i][j] == SYMBOL_GREEN) {
+						numG += 1;
+					}
+					if (forestState[i][j] == SYMBOL_INFECTED) {
+						numI +=1;
+					}
+					if (forestState[i][j] == SYMBOL_DEFOLIATED) {
+						numD +=1;
+					}
+				}
+			}
+			if (numG == 25) {
+				return forestState;
+			}
+			int[] arr1 = new int[numI];
+			int[] arr2 = new int[numI];
+			int[] arr3 = new int[numD];
+			int[] arr4 = new int[numD];
+			int count1 = 0;
+			int count2 = 0;
+
+			//把含有I和D的索引数都存起来
+			for (int i = 0; i < forestState.length; i++) {
+				for (int j = 0; j < forestState[i].length; j++) {
+					if (forestState[i][j] == SYMBOL_INFECTED) {
+						arr1[count1] = i;
+						arr2[count1] = j;
+						count1++;
+					}
+					else if (forestState[i][j] == SYMBOL_DEFOLIATED) {
+						arr3[count2] = i;
+						arr4[count2] = j;
+						count2++;
+					}
+				}
+			}
+
+			for (int k = 0; k < numI; k++) {
+					int row = arr1[k];
+					int col = arr2[k];
+					forestState[row][col] = SYMBOL_DEFOLIATED;
+				if (row+1 < 5) {
+					if (forestState[row+1][col] == SYMBOL_GREEN) {
+						forestState[row+1][col] = SYMBOL_INFECTED;
+					}
+				}
+
+				if (row-1 >= 0) {
+					if (forestState[row-1][col] == SYMBOL_GREEN) {
+						forestState[row-1][col] = SYMBOL_INFECTED;
+					}
+				}
+				if (col+1 < 5 ) {
+					if (forestState[row][col+1] == SYMBOL_GREEN) {
+						forestState[row][col+1] = SYMBOL_INFECTED;
+					}
+				}
+				if (col-1 >= 0) {
+					if (forestState[row][col-1] == SYMBOL_GREEN) {
+						forestState[row][col-1] = SYMBOL_INFECTED;
+					}
+				}
+
+			}
+
+			for (int y = 0; y < numD; y++) {
+				int row = arr3[y];
+				int col = arr4[y];
+				forestState[row][col] = SYMBOL_GREEN;
+			}
+
+			System.out.println("=============");
+			System.out.println("Simulation state #" + (count+1));
+			System.out.println("-------------------");
+
+			for (int i = 0; i <  forestState.length; i++) { // 遍历行
+				for (int j = 0; j < forestState[i].length; j++) { // 遍历列
+					System.out.print(forestState[i][j] + " "); // 打印元素后跟一个空格
+				}
+				System.out.println();
+			}
+			System.out.println("===================");
+			System.out.println(" ");
+			count++;
+		}
+	return forestState;
+	}。
+
